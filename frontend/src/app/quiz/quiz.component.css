@@ -1,3 +1,13 @@
 :host {
     display: block;
 }
+
+.hovered {
+    background-color: #303030;
+    color: white;
+}
+
+.highlighted {
+    background-color: purple;
+    color: white;
+}
