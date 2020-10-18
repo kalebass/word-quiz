@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import se.arvidaxelsson.word_quiz.jooq.Tables;
 import se.arvidaxelsson.word_quiz.model.Word;
 
-import java.util.List;
+import java.util.Collection;
 
 @Service
 public class WordService {
@@ -15,17 +15,17 @@ public class WordService {
         this.create = create;
     }
 
-    public List<Word> getWordsInCollection(String collection) {
+    public Collection<Word> getWordsInCollections(Collection<String> collections) {
         return create
                 .select(Tables.WORD.ZH, Tables.WORD.EN, Tables.WORD.PINYIN)
                 .from(Tables.WORD)
                 .naturalJoin(Tables.WORD_COLLECTION)
                 .naturalJoin(Tables.COLLECTION)
-                .where(Tables.COLLECTION.COLLECTION_NAME.eq(collection))
+                .where(Tables.COLLECTION.COLLECTION_NAME.in(collections))
                 .fetchInto(Word.class);
     }
 
-    public List<Word> getAllWords() {
+    public Collection<Word> getAllWords() {
         return create
                 .select(Tables.WORD.ZH, Tables.WORD.EN, Tables.WORD.PINYIN)
                 .from(Tables.WORD)

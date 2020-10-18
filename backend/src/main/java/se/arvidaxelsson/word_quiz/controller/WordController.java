@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.arvidaxelsson.word_quiz.model.Word;
 import se.arvidaxelsson.word_quiz.service.WordService;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 public class WordController {
@@ -17,10 +17,10 @@ public class WordController {
     }
 
     @GetMapping("api/words/")
-    public List<Word> getWords(@RequestParam(required = false) String collection) {
+    public Collection<Word> getWords(@RequestParam(required = false) Collection<String> collection) {
         if (collection == null) {
             return wordService.getAllWords();
         }
-        return wordService.getWordsInCollection(collection);
+        return wordService.getWordsInCollections(collection);
     }
 }

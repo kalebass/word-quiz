@@ -19,7 +19,7 @@ export class QuizComponent {
     displayedColumns = ['zh', 'pinyin', 'en'];
 
     constructor(wordService: WordService) {
-        wordService.getWords('Lesson 1').subscribe(words => {
+        wordService.getWords(['Lesson 1']).subscribe(words => {
             this.answers = shuffle(words);
             this.nextQuestion();
         });

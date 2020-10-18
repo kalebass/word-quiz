@@ -9,7 +9,7 @@ import { Word } from './word';
 export class WordService {
     constructor(private http: HttpClient) { }
 
-    getWords(collection: string): Observable<Word[]> {
+    getWords(collection: string[]): Observable<Word[]> {
         return this.http.get<Word[]>('api/words/', { params: { collection } });
     }
 }
