@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { sampleSize, shuffle } from 'lodash-es';
+import { inRange, random, sampleSize, shuffle } from 'lodash-es';
 import { Word } from '../word';
 import { WordService } from '../word.service';
 
@@ -16,7 +16,9 @@ export class QuizComponent {
     answers: Word[] = [];
     selection = new SelectionModel<Word>(false);
     dataSource = new MatTableDataSource<Word>();
-    displayedColumns = ['zh', 'pinyin', 'en'];
+    displayedColumns = ['pinyin', 'en'];
+    currentQuestion = -1;
+    correctCount = 0;
 
     constructor(wordService: WordService) {
         wordService.getWords(['Lesson 1']).subscribe(words => {
@@ -25,7 +27,29 @@ export class QuizComponent {
         });
     }
 
+    makeAnswer(): void {
+        const correct = this.selection.isSelected(this.answers[this.currentQuestion]);
+        if (correct) {
+            ++this.correctCount;
+        }
+        if (this.currentQuestion + 1 < this.answers.length) {
+            this.nextQuestion();
+        } else {
+            this.currentQuestion = -1;
+        }
+    }
+
+    isAnswerEnabled(): boolean {
+        return inRange(this.currentQuestion, this.answers.length) && this.selection.hasValue();
+    }
+
     nextQuestion(): void {
-        this.dataSource.data = sampleSize(this.answers, numChoices);
+        ++this.currentQuestion;
+        const options = sampleSize(this.answers, numChoices);
+        if (!options.includes(this.answers[this.currentQuestion])) {
+            options[random(0, options.length - 1)] = this.answers[this.currentQuestion];
+        }
+        this.selection.clear();
+        this.dataSource.data = options;
     }
 }

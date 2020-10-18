@@ -9,6 +9,10 @@ import { Word } from './word';
 export class WordService {
     constructor(private http: HttpClient) { }
 
+    getAllWords(): Observable<Word[]> {
+        return this.http.get<Word[]>('api/words/');
+    }
+
     getWords(collection: string[]): Observable<Word[]> {
         return this.http.get<Word[]>('api/words/', { params: { collection } });
     }
