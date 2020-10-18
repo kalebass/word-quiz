@@ -25,6 +25,15 @@ export class QuizComponent {
             this.answers = shuffle(words);
             this.nextQuestion();
         });
+        this.selection.changed.subscribe(change => {
+            if (change.added.length === 0) {
+                return;
+            }
+            const word = change.added[0];
+            const utterance = new SpeechSynthesisUtterance(word.zh);
+            utterance.lang = 'zh';
+            window.speechSynthesis.speak(utterance);
+        });
     }
 
     makeAnswer(): void {
