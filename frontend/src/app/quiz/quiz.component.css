@@ -18,6 +18,11 @@ table#options {
     color: white;
 }
 
+.correct {
+    background-color: seagreen;
+    color: white;
+}
+
 #bottom-bar {
     display: flex;
     justify-content: flex-end;

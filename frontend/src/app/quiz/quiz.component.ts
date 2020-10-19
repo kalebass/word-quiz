@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { inRange, random, sampleSize, shuffle } from 'lodash-es';
+import { random, sampleSize, shuffle } from 'lodash-es';
 import { Word } from '../word';
 import { WordService } from '../word.service';
 
@@ -19,6 +19,7 @@ export class QuizComponent {
     displayedColumns = ['pinyin', 'en'];
     currentQuestion = -1;
     correctCount = 0;
+    showingAnswers = false;
 
     constructor(wordService: WordService) {
         wordService.getWords(['Lesson 1']).subscribe(words => {
@@ -41,15 +42,21 @@ export class QuizComponent {
         if (correct) {
             ++this.correctCount;
         }
-        if (this.currentQuestion + 1 < this.answers.length) {
-            this.nextQuestion();
+        this.showingAnswers = true;
+    }
+
+    isContinueEnabled(): boolean {
+        if (this.showingAnswers) {
+            return this.currentQuestion + 1 < this.answers.length;
         } else {
-            this.currentQuestion = -1;
+            return this.selection.hasValue();
         }
     }
 
-    isAnswerEnabled(): boolean {
-        return inRange(this.currentQuestion, this.answers.length) && this.selection.hasValue();
+    clickRow(row: Word): void {
+        if (!this.showingAnswers) {
+            this.selection.toggle(row);
+        }
     }
 
     nextQuestion(): void {
@@ -60,5 +67,6 @@ export class QuizComponent {
         }
         this.selection.clear();
         this.dataSource.data = options;
+        this.showingAnswers = false;
     }
 }

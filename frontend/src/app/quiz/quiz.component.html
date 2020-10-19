@@ -15,13 +15,14 @@
             {{word.en}}
         </td>
     </ng-container>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"
-        [ngClass]="{ hovered: row.hovered, highlighted: selection.isSelected(row) }" (mouseover)="row.hovered = true"
-        (mouseout)="row.hovered = false">
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickRow(row)" [class.hovered]="row.hovered"
+        [class.highlighted]="selection.isSelected(row)" [class.correct]="showingAnswers &&
+        row==answers[currentQuestion]" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false">
     </tr>
 </table>
 <div id="bottom-bar">
-    <button mat-raised-button color="primary" (click)="makeAnswer()" [disabled]="!isAnswerEnabled()">
-        Answer
+    <button mat-raised-button color="primary" (click)="showingAnswers ? nextQuestion() : makeAnswer()"
+        [disabled]="!isContinueEnabled()">
+        {{showingAnswers ? 'Continue' : 'Answer'}}
     </button>
 </div>
