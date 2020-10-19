@@ -21,6 +21,9 @@
     </tr>
 </table>
 <div id="bottom-bar">
+    <p>
+        Word {{currentQuestion + 1}} of {{answers.length}}. Correct answers: {{correctCount}}.
+    </p>
     <button mat-raised-button color="primary" (click)="showingAnswers ? nextQuestion() : makeAnswer()"
         [disabled]="!isContinueEnabled()">
         {{showingAnswers ? 'Continue' : 'Answer'}}
